@@ -9,7 +9,7 @@
 		"recompile": "npm run clean && npm run compile",
 		"clean": "rm -rf .compiled && mkdir -p .compiled/src && mkdir -p .compiled/tests",
 		"compile": "babel src --out-dir .compiled/src && babel tests --out-dir .compiled/tests",
-		"cover": "cd .compiled/src && istanbul cover ../../node_modules/mocha/bin/_mocha *.js -R ../tests --coverage",
+		"cover": "npm run recompile && cd .compiled/src && istanbul cover ../../node_modules/mocha/bin/_mocha *.js -R ../tests --coverage",
 		"test": "npm run recompile && mocha --require source-map-support/register ./.compiled/tests"
 	},
 	"author": "Steve Konves",

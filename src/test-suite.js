@@ -13,17 +13,17 @@ class TestSuite extends EventEmitter {
 	add(smokeTest) {
 		this.smokeTests[smokeTest.id] = smokeTest;
 
-		smokeTest.on('run', result => {
-			if (this.listenerCount('run') > 0) {
-				this.emit('run', smokeTest.id, result);
-			}
-		});
+		smokeTest.on('run', result => this.onRun(smokeTest.id, result));
 
-		smokeTest.on('error', reason => {
-			if (this.listenerCount('error') > 0) {
-				this.emit('error', smokeTest.id, reason);
-			}
-		});
+		smokeTest.on('error', result => this.onError(smokeTest.id, result));
+	}
+
+	onRun(testId, result) {
+		this.emit('run', testId, result);
+	}
+
+	onError(testId, result) {
+		this.emit('error', testId, result);
 	}
 
 	/**

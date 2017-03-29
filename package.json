@@ -1,30 +1,32 @@
 {
-  "name": "esnext-reference",
-  "version": "1.0.0",
-  "description": "Reference projects for ES6/7 code",
-  "main": "index.js",
-  "scripts": {
-    "lint": "eslint ./src ./tests",
-    "lintfix": "eslint --fix ./src ./tests",
-    "recompile": "npm run clean && npm run compile",
-    "clean": "rm -rf .compiled && mkdir -p .compiled/src && mkdir -p .compiled/tests",
-    "compile": "babel src --out-dir .compiled/src && babel tests --out-dir .compiled/tests",
-    "test": "npm run recompile && mocha --require source-map-support/register ./.compiled/tests"
-  },
-  "author": "Steve Konves",
-  "license": "MIT",
-  "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-eslint": "^7.1.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.18.0",
-    "babel-plugin-transform-object-rest-spread": "^6.16.0",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-0": "^6.16.0",
-    "chai": "^3.5.0",
-    "eslint": "^3.9.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "mocha": "^3.2.0",
-    "source-map-support": "^0.4.11"
-  }
+	"name": "dt-stability",
+	"version": "0.0.1",
+	"description": "Implementations of stability patterns for Node.js",
+	"main": "index.js",
+	"scripts": {
+		"lint": "eslint ./src ./tests",
+		"lintfix": "eslint --fix ./src ./tests",
+		"recompile": "npm run clean && npm run compile",
+		"clean": "rm -rf .compiled && mkdir -p .compiled/src && mkdir -p .compiled/tests",
+		"compile": "babel src --out-dir .compiled/src && babel tests --out-dir .compiled/tests",
+		"cover": "cd .compiled/src && istanbul cover ../../node_modules/mocha/bin/_mocha *.js -R ../tests --coverage",
+		"test": "npm run recompile && mocha --require source-map-support/register ./.compiled/tests"
+	},
+	"author": "Steve Konves",
+	"license": "MIT",
+	"devDependencies": {
+		"babel-cli": "^6.18.0",
+		"babel-eslint": "^7.1.0",
+		"babel-plugin-transform-es2015-destructuring": "^6.18.0",
+		"babel-plugin-transform-object-rest-spread": "^6.16.0",
+		"babel-plugin-transform-runtime": "^6.22.0",
+		"babel-preset-es2015": "^6.18.0",
+		"babel-preset-stage-0": "^6.16.0",
+		"chai": "^3.5.0",
+		"eslint": "^3.9.1",
+		"eslint-plugin-babel": "^3.3.0",
+		"istanbul": "^0.4.5",
+		"mocha": "^3.2.0",
+		"source-map-support": "^0.4.11"
+	}
 }

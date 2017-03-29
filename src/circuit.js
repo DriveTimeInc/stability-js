@@ -1,5 +1,4 @@
 import EventEmitter from 'events';
-//import CircuitError from './circuit-error';
 
 export default class Circuit extends EventEmitter {
 	constructor(name, timeout) {

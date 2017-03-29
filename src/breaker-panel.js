@@ -25,7 +25,7 @@ class BreakerPanel {
 	 * @returns {Array<Circuit>}
 	 */
 	list() {
-		var circuits = [];
+		let circuits = [];
 
 		for (let circuit in this.circuits) {
 			circuits.push(this.circuits[circuit]);

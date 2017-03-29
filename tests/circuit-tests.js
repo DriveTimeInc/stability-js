@@ -407,5 +407,23 @@ describe('Circuit', function () {
 			assert.notEqual(sut.reason, reason);
 			assert.equal(sut.history.length, expectedEndHistoryCount);
 		});
+
+		it('supplies default reason', function () {
+			// ARRANGE
+			const sut = new Circuit('test circuit');
+
+			assert.equal(sut.state, Circuit.ENABLED);
+
+			const expectedEndState = Circuit.DISABLED;
+			const expectedEndHistoryCount = sut.history.length + 1;
+
+			// ACT
+			sut.changeState(Circuit.DISABLED /* no reason given */);
+
+			// ASSERT
+			assert.equal(sut.state, expectedEndState);
+			assert.equal(sut.history.length, expectedEndHistoryCount);
+			assert.ok(sut.reason);
+		});
 	});
 });

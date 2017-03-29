@@ -41,4 +41,18 @@ describe('SingleFailureCircuit', function () {
 		// ASSERT
 		assert.equal(sut.state, Circuit.ENABLED);
 	});
+
+	it('does nothing on sebsequnet successes', function () {
+		// ARRANGE
+		const sut = new SingleFailureCircuit('test circuit', 0, 60000);
+		assert.equal(sut.state, Circuit.ENABLED);
+		const expectedHistoryCount = sut.history.length;
+
+		// ACT
+		sut.emit('success', 0);
+
+		// ASSERT
+		assert.equal(sut.state, Circuit.ENABLED);
+		assert.equal(sut.history.length, expectedHistoryCount);
+	});
 });

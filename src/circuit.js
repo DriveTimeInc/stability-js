@@ -17,12 +17,12 @@ export default class Circuit extends EventEmitter {
 
 	/** Gets the reason for the current state of this circuit */
 	get reason() {
-		return this.history[0] ? this.history[0].reason : undefined;
+		return this.history[0].reason;
 	}
 
 	/** Gets the time that the current state of this circuit was set */
 	get since() {
-		return this.history[0] ? this.history[0].date : undefined;
+		return this.history[0].date;
 	}
 
 	enable(reason) {

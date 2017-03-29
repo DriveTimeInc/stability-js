@@ -55,9 +55,7 @@ export default class SmokeTest extends EventEmitter {
 	 */
 	onRun(result) {
 		if (result instanceof TestResult) {
-			if (this.listenerCount('run') > 0) {
-				this.emit('run', result);
-			}
+			this.emit('run', result);
 		} else {
 			throw new Error('result is not an instance of TestResult');
 		}
@@ -70,9 +68,7 @@ export default class SmokeTest extends EventEmitter {
 	 */
 	onError(result) {
 		if (result instanceof TestResult) {
-			if (this.listenerCount('error') > 0) {
-				this.emit('error', result);
-			}
+			this.emit('error', result);
 		} else {
 			throw new Error('result is not an instance of TestResult');
 		}

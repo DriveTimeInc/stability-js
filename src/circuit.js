@@ -53,9 +53,7 @@ export default class Circuit extends EventEmitter {
 
 			this.history = this.history.slice(0, 10);
 
-			if (this.listeners('change').length > 0) {
-				this.emit('change', state, reason);
-			}
+			this.onChange(state, reason);
 		}
 	}
 
@@ -72,10 +70,7 @@ export default class Circuit extends EventEmitter {
 	 */
 	async run(fnPromiseCreator, isError) {
 		if (this.state == Circuit.DISABLED) {
-			if (this.listeners('reject').length > 0) {
-				const e = new Date();
-				this.emit('reject');
-			}
+			this.onReject();
 			const err = new Error(`Circuit '${this.name}' cannot be accessed at this time (state: ${this.state})`);
 			err.circuit = this;
 			throw err;
@@ -90,32 +85,41 @@ export default class Circuit extends EventEmitter {
 						reject(err);
 					}, this.timeout))
 				]);
-				if (this.listenerCount('success') > 0) {
-					const e = new Date();
-					this.emit('success', e - s);
-				}
-
+				const e = new Date();
+				this.onSuccess(e - s);
 				return result;
 			} catch (ex) {
-				if (typeof isError != 'function' || (ex && ex.circuit)) {
-					if (this.listenerCount('error') > 0) {
-						this.emit('error', ex);
-					}
-				} else if (isError) {
+				if (ex && ex.circuit) {
+					this.onError(ex);
+				} else if (typeof isError == 'function') {
 					if (isError(ex)) {
-						if (this.listeners('error').length > 0) {
-							this.emit('error', ex);
-						}
+						this.onError(ex);
 					} else {
-						if (this.listeners('success').length > 0) {
-							const e = new Date();
-							this.emit('success', e - s);
-						}
+						const e = new Date();
+						this.onSuccess(e - s);
 					}
+				} else {
+					this.onError(ex);
 				}
 				throw ex;
 			}
 		}
+	}
+
+	onReject() {
+		this.emit('reject');
+	}
+
+	onSuccess(duration) {
+		this.emit('success', duration);
+	}
+
+	onError(error) {
+		this.emit('error', error);
+	}
+
+	onChange(state, reason) {
+		this.emit('change', state, reason);
 	}
 
 	static get ENABLED() {

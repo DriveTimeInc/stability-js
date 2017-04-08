@@ -63,8 +63,8 @@ export default class Circuit extends EventEmitter {
 	 *  - error: the action threw an Error that was considered by the circuit to be an error.
 	 *  - reject: the action was not run because of the current state of the circuit.
 	 * @param {function():Promise<object>} fnPromiseCreator function that constructs and returns a Promise
-	 * @param {function(Error):boolean} isError function that accpets an Error and returns value indicating
-	 * whether this circuit should count it as an error.  Note that all Errors are throw regardless of whether
+	 * @param {function(Error):boolean} isError function that accepts an Error and returns value indicating
+	 * whether this circuit should count it as an error.  Note that all Errors are thrown regardless of whether
 	 * or not they are counted as errors.
 	 * @return {Promise<object>}
 	 */

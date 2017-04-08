@@ -63,12 +63,12 @@ export default class Circuit extends EventEmitter {
 	 *  - error: the action threw an Error that was considered by the circuit to be an error.
 	 *  - reject: the action was not run because of the current state of the circuit.
 	 * @param {function():Promise<object>} fnPromiseCreator function that constructs and returns a Promise
-	 * @param {function(Error):boolean} isError function that accepts an Error and returns value indicating
+	 * @param {function(Error):boolean} fnIsError function that accepts an Error and returns value indicating
 	 * whether this circuit should count it as an error.  Note that all Errors are thrown regardless of whether
 	 * or not they are counted as errors.
 	 * @return {Promise<object>}
 	 */
-	async run(fnPromiseCreator, isError) {
+	async run(fnPromiseCreator, fnIsError) {
 		if (this.state == Circuit.DISABLED) {
 			this.onReject();
 			const err = new Error(`Circuit '${this.name}' cannot be accessed at this time (state: ${this.state})`);
@@ -91,8 +91,8 @@ export default class Circuit extends EventEmitter {
 			} catch (ex) {
 				if (ex && ex.circuit) {
 					this.onError(ex);
-				} else if (typeof isError == 'function') {
-					if (isError(ex)) {
+				} else if (typeof fnIsError == 'function') {
+					if (fnIsError(ex)) {
 						this.onError(ex);
 					} else {
 						const e = new Date();

@@ -42,7 +42,7 @@ describe('SingleFailureCircuit', function () {
 		assert.equal(sut.state, Circuit.ENABLED);
 	});
 
-	it('does nothing on sebsequnet successes', function () {
+	it('does nothing on sebsequent successes', function () {
 		// ARRANGE
 		const sut = new SingleFailureCircuit('test circuit', 0, 60000);
 		assert.equal(sut.state, Circuit.ENABLED);

@@ -1,7 +1,7 @@
 import Circuit from './circuit';
 
 /** Circuit which trips on the first error */
-export default class SingleFailureCircit extends Circuit {
+export default class SingleFailureCircuit extends Circuit {
 	constructor(name, timeout, cooldown) {
 		super(name, timeout);
 		this.cooldown = cooldown;

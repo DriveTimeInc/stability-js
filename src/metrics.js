@@ -3,14 +3,47 @@ import EventEmitter from 'events';
 import Circuit from './circuit';
 
 export default class Metrics extends EventEmitter {
-	constructor() {
+	constructor(buckets, intervals) {
 		super();
 		this.successes = [];
 		this.failures = [];
 
 		this._successIndex = 0;
 		this._failureIndex = 0;
-		this._buckets = 10;
+		this._buckets = buckets;
+		this._intervals = intervals;
+
+		this._isRunning = true;
+	}
+
+	start(interval) {
+		if (this._isRunning) {
+			const tick = () => {
+				this.run();
+				setTimeout(tick, interval);
+			};
+
+			tick();
+		}
+	}
+
+	stop() {
+		this._isRunning = false;
+	}
+
+	run() {
+		const newMetrics = {
+			success: {},
+			failure: {}
+		};
+
+		for (let span in this._intervals) {
+			newMetrics.success['' + span] = Metrics.computeMetrics(span, this.successes, this._buckets, this._successIndex);
+			newMetrics.failure['' + span] = Metrics.computeMetrics(span, this.failures, this._buckets, this._failureIndex);
+		}
+
+		this.metrics = newMetrics;
+		onMetrics(newMetrics);
 	}
 
 	/**
@@ -29,6 +62,10 @@ export default class Metrics extends EventEmitter {
 	handleFailure() {
 		this.failures[this._failureIndex++] = { ts: new Date().getTime() };
 		this._failureIndex %= this._buckets;
+	}
+
+	onMetrics(metrics) {
+		this.emit('metrics', metrics);
 	}
 
 	/**

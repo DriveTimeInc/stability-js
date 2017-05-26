@@ -1,6 +1,6 @@
 import Circuit from './circuit';
 
-/** Circuit which trips after a configured amount of errors have occurred */
+/** Circuit which trips after a configured amount of consecutive errors have occurred */
 export default class MultiFailureCircuit extends Circuit {
 	constructor(name, timeout, cooldown, maxFailures) {
 		super(name, timeout);

@@ -19,9 +19,9 @@ export default class MultiFailureCircuit extends Circuit {
 		});
 
 		this.on('success', ms => {
+			this.errorCount = 0;
 			if (this.state == Circuit.HALFOPEN) {
 				this.enable(`Circuit '${this.name}' was successfully used while half-open.`);
-				this.errorCount = 0;
 			}
 		});
 	}

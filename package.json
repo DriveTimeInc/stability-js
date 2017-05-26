@@ -10,6 +10,7 @@
 		"clean": "rm -rf .compiled && mkdir -p .compiled/src && mkdir -p .compiled/tests",
 		"compile": "babel src --out-dir .compiled/src && babel tests --out-dir .compiled/tests",
 		"cover": "npm run recompile && cd .compiled/src && istanbul cover ../../node_modules/mocha/bin/_mocha *.js -R ../tests --coverage",
+		"coveralls": "cat .compiled/src/coverage/lcov.info | coveralls",
 		"test": "npm run recompile && mocha --require source-map-support/register ./.compiled/tests"
 	},
 	"author": "Steve Konves",
@@ -23,6 +24,7 @@
 		"babel-preset-es2015": "^6.18.0",
 		"babel-preset-stage-0": "^6.16.0",
 		"chai": "^3.5.0",
+		"coveralls": "^2.13.0",
 		"eslint": "^3.9.1",
 		"eslint-plugin-babel": "^3.3.0",
 		"istanbul": "^0.4.5",

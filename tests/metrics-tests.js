@@ -5,7 +5,7 @@ import Metrics from '../src/metrics';
 describe('Metrics', function () {
 	it('records success', function () {
 		// ARRANGE
-		const sut = new Metrics();
+		const sut = new Metrics(10);
 		const circuit = new Circuit('test');
 
 		sut.subscribe(circuit);
@@ -20,7 +20,7 @@ describe('Metrics', function () {
 
 	it('records failure', function () {
 		// ARRANGE
-		const sut = new Metrics();
+		const sut = new Metrics(10);
 		const circuit = new Circuit('test');
 
 		sut.subscribe(circuit);
@@ -35,7 +35,7 @@ describe('Metrics', function () {
 
 	it('rolls over success buckets', function () {
 		// ARRANGE
-		const sut = new Metrics();
+		const sut = new Metrics(10);
 		const circuit = new Circuit('test');
 
 		sut.subscribe(circuit);
@@ -53,7 +53,7 @@ describe('Metrics', function () {
 
 	it('rolls over failure buckets', function () {
 		// ARRANGE
-		const sut = new Metrics();
+		const sut = new Metrics(10);
 		const circuit = new Circuit('test');
 
 		sut.subscribe(circuit);

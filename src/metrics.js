@@ -3,6 +3,11 @@ import EventEmitter from 'events';
 import Circuit from './circuit';
 
 export default class Metrics extends EventEmitter {
+	/**
+	 * Creates a new Metrics object for computing circuit performance
+	 * @param {number} buckets the number of buckets in the each of the event buffers
+	 * @param {number[]} intervals the spans of time (in ms) over which metrics will be computed (eg, 1 * 60000ms, 5 * 60000ms, etc)
+	 */
 	constructor(buckets, intervals) {
 		super();
 		this.successes = [];
@@ -16,6 +21,10 @@ export default class Metrics extends EventEmitter {
 		this._isRunning = true;
 	}
 
+	/**
+	 * Starts re-computing metrics at the specified interval until stop() is called.
+	 * @param {Number} interval The interval at which metrics are re-computed.
+	 */
 	start(interval) {
 		if (this._isRunning) {
 			const tick = () => {
@@ -27,6 +36,10 @@ export default class Metrics extends EventEmitter {
 		}
 	}
 
+	/**
+	 * Stops all computation of metrics.
+	 * @param {Number} interval The interval at which metrics are re-computed.
+	 */
 	stop() {
 		this._isRunning = false;
 	}
@@ -69,11 +82,16 @@ export default class Metrics extends EventEmitter {
 	}
 
 	/**
-	 * Computes metrics for the specified array
-	 * @param {Number} span timespan in milliseconds
-	 * @param {Array} array array from which to compute metrics
-	 * @param {Number} buckets total number of buckets
-	 * @param {Number} startIndex index at which to start computing
+	 * Computes metrics for the specified array.  The returned object contains:
+	 * `count`: the number of events which occurred withing the timespan,
+	 * `mean`: the arithmetic mean of the event durations, and
+	 * `stdev`: the standard deviation of the event durations
+	 * @param {number} span timespan in milliseconds
+	 * @param {Array<{ts: number, ms: number}>} array array from which to compute metrics.
+	 * `ts` represents the timestamp of the event.
+	 * `ms` represents the duration of the event.
+	 * @param {number} buckets total number of buckets
+	 * @param {number} startIndex index at which to start computing
 	 */
 	static computeMetrics(span, array, buckets, startIndex) {
 		const s = startIndex;

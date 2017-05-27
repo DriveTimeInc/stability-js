@@ -24,8 +24,8 @@ export default class MetricsBasedCircuit extends Circuit {
 			}
 		});
 
-		this.metrics.on('newMetrics', newMetrics => {
-			const oneMinuteErrors = newMetrics.successes[1 * 60000].count;
+		this.metrics.on('metrics', metrics => {
+			const oneMinuteErrors = metrics.successes[1 * 60000].count;
 
 			if (oneMinuteErrors > 10) {
 				this.disable(`Circuit '${this.name}' was disabled after 10 errors in one minute.`);

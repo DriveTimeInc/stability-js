@@ -106,6 +106,59 @@ export default class Circuit extends EventEmitter {
 		}
 	}
 
+	async runWithCallback(fnWithCallback, fnIsError) {
+		if (this.state == Circuit.DISABLED) {
+			this.onReject();
+			const err = new Error(`Circuit '${this.name}' cannot be accessed at this time (state: ${this.state})`);
+			err.circuit = this;
+			throw err;
+		} else {
+			const s = new Date();
+
+			const fn = fnWithCallback;
+
+			// Attach spy to the service function
+			fnWithCallback = function () {
+				const callback = arguments[arguments.length - 1];
+
+				// If the last argument is a function, proceed (following the error-first callback pattern)
+				if (typeof (callback) === 'function') {
+
+					// Attach spy to the callback function
+					arguments[arguments.length - 1] = function () {
+						let err = arguments[0];
+						if (err) {
+							if (err && err.circuit) {
+								this.onError(err);
+							} else if (typeof fnIsError == 'function') {
+								if (fnIsError(err)) {
+									this.onError(ex);
+								} else {
+									const e = new Date();
+									this.onSuccess(e - s);
+								}
+							} else {
+								this.onError(err);
+							}
+						}
+
+						// Invoke callback
+						callback.apply(this.service, arguments);
+					}.bind(this);
+
+					// Invoke function
+					fn.apply(this.service, arguments);
+				} else {
+
+					// Do nothing
+					fn.apply(this.service, arguments);
+				}
+			}.bind(this);
+
+			return fnWithCallback;
+		}
+	}
+
 	onReject() {
 		this.emit('reject');
 	}
